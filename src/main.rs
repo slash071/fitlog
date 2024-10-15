@@ -4,14 +4,14 @@ use fitlog::{valid_input, classify_bmi};
 fn main() {
     // Introduction
     let line_length = 86;
-    let welcome_text = "Welcome to the BMI Tracker App for Adults";
+    let welcome_text = "Welcome to FitLog";
     let padding = (line_length - welcome_text.len()) / 2;
 
     println!("╔═══════════════════════════════════════════════════════════════════════════════════════╗");
     println!("║ {}{}{} ║", " ".repeat(padding), welcome_text, " ".repeat(padding));
     println!("╠═══════════════════════════════════════════════════════════════════════════════════════╣");
     println!("║  This app calculates your Body Mass Index (BMI) and uses the data for visualization.  ║");
-    println!("║  * Note: This app is intended for adults only (aged 20 and above).                    ║");
+    println!("║  * Designed specifically for adults (ages 20 and above).                              ║");
     println!("╚═══════════════════════════════════════════════════════════════════════════════════════╝\n");
 
     // Input height and weight
