@@ -1,0 +1,11 @@
+[package]
+name = "fitlog"
+version = "0.1.0"
+authors = ["Mohammadreza Roosta"]
+edition = "2021"
+description = "A simple BMI tracker app to monitor fitness progress."
+license = "GPL-3.0"
+readme = "README.md"
+
+[dependencies]
+chrono = "0.4.38"
