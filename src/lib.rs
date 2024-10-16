@@ -1,4 +1,5 @@
 use std::io;
+pub mod structs;
 
 // Define reasonable limits for height and weight
 const MIN_HEIGHT: f32 = 50.0;
@@ -6,10 +7,11 @@ const MAX_HEIGHT: f32 = 300.0;
 const MIN_WEIGHT: f32 = 3.0;
 const MAX_WEIGHT: f32 = 600.0;
 
+// Validate user input for height or weight
 pub fn valid_input(measurement: &str) -> f32 {
     if measurement == "height" {
         loop {
-            println!("> Enter your height (In cm, between {} to {}): ", MIN_HEIGHT, MAX_HEIGHT);
+            println!("> Enter your height (in cm, between {} to {}): ", MIN_HEIGHT, MAX_HEIGHT);
             
             let mut height_input = String::new();
             io::stdin()
@@ -28,7 +30,7 @@ pub fn valid_input(measurement: &str) -> f32 {
         }
     } else if measurement == "weight" {
         loop {
-            println!("> Enter your weight (In kg, between {} to {}): ", MIN_WEIGHT, MAX_WEIGHT);
+            println!("> Enter your weight (in kg, between {} to {}): ", MIN_WEIGHT, MAX_WEIGHT);
             
             let mut weight_input = String::new();
             io::stdin()
@@ -46,13 +48,13 @@ pub fn valid_input(measurement: &str) -> f32 {
             }
         }
     } else {
-        println!(">>ERROR: Invalid argument '{}' for get_valid_input function!<<\nExiting program...", measurement);
+        println!(">> ERROR: Invalid argument '{}' for valid_input function! <<\nExiting program...", measurement);
         std::process::exit(1);
     }
 }
 
+// Classify BMI into categories
 pub fn classify_bmi(bmi: f32) -> &'static str {
-
     if bmi > 0.0 && bmi < 18.5 { "Underweight" }
     else if bmi >= 18.5 && bmi < 25.0 { "Normal Weight" }
     else if bmi >= 25.0 && bmi < 30.0 { "Overweight" }

@@ -1,5 +1,6 @@
 use chrono::Local;
 use fitlog::{valid_input, classify_bmi};
+use fitlog::structs::Person;
 
 fn main() {
     // Introduction
@@ -14,20 +15,27 @@ fn main() {
     println!("║  * Designed specifically for adults (ages 20 and above).                              ║");
     println!("╚═══════════════════════════════════════════════════════════════════════════════════════╝\n");
 
-    // Input height and weight
-    let height = valid_input("height");
-    let weight = valid_input("weight");
+    // Input height and weight from the user
     let current = Local::now();
+    let mut user = Person {
+        height: valid_input("height"),
+        weight: valid_input("weight"),
+        bmi: 0.0,
+    };
 
-    // BMI calculation
-    let height_m: f32 = height / 100.0;  // Convert height to meters
-    let bmi: f32 = weight / height_m.powf(2.0);
+    // Calculate BMI
+    user.bmi = user.calculate_bmi();
 
-    // Print result
+    // Print the BMI result
     println!("\n───────────────────────────────────");
-    let bmi_category = classify_bmi(bmi);
-    println!("Your BMI is: {bmi:.2}, {bmi_category}");
+    println!("Your BMI is: {:.2}, {}", user.bmi, classify_bmi(user.bmi),);
     println!("───────────────────────────────────\n");
 
-    println!("\nSaved data: {}, {:.2}, {:.1}cm, {:.1}kg", current.format("%Y-%m-%d"), bmi, height, weight);
+    // Display data
+    println!("Saved data: {}, {:.2}, {:.1}cm, {:.1}kg", 
+        current.format("%Y-%m-%d"),
+        user.bmi,
+        user.height,
+        user.weight
+    );
 }
