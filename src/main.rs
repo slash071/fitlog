@@ -1,25 +1,23 @@
 use chrono::Local;
-use fitlog::{valid_input, classify_bmi};
+use fitlog::{valid_input, classify_bmi, display_welcome};
 use fitlog::structs::Person;
+use colored::Colorize;
+
+// Define reasonable limits for height and weight
+const MIN_HEIGHT: f32 = 50.0;
+const MAX_HEIGHT: f32 = 300.0;
+const MIN_WEIGHT: f32 = 3.0;
+const MAX_WEIGHT: f32 = 600.0;
 
 fn main() {
     // Introduction
-    let line_length = 86;
-    let welcome_text = "Welcome to FitLog";
-    let padding = (line_length - welcome_text.len()) / 2;
-
-    println!("╔═══════════════════════════════════════════════════════════════════════════════════════╗");
-    println!("║ {}{}{} ║", " ".repeat(padding), welcome_text, " ".repeat(padding));
-    println!("╠═══════════════════════════════════════════════════════════════════════════════════════╣");
-    println!("║  This app calculates your Body Mass Index (BMI) and uses the data for visualization.  ║");
-    println!("║  * Designed specifically for adults (ages 20 and above).                              ║");
-    println!("╚═══════════════════════════════════════════════════════════════════════════════════════╝\n");
+    display_welcome();
 
     // Input height and weight from the user
     let current = Local::now();
     let mut user = Person {
-        height: valid_input("height"),
-        weight: valid_input("weight"),
+        height: valid_input("height", MIN_HEIGHT, MAX_HEIGHT, "cm"),
+        weight: valid_input("weight", MIN_WEIGHT, MAX_WEIGHT, "kg"),
         bmi: 0.0,
     };
 
@@ -27,9 +25,12 @@ fn main() {
     user.bmi = user.calculate_bmi();
 
     // Print the BMI result
-    println!("\n───────────────────────────────────");
-    println!("Your BMI is: {:.2}, {}", user.bmi, classify_bmi(user.bmi),);
-    println!("───────────────────────────────────\n");
+    println!(
+        "\n{} {:.2}, {}\n", 
+        "Your BMI is:".truecolor(166, 227, 161),
+        format!("{}", user.bmi).truecolor(137, 220, 235),
+        classify_bmi(user.bmi)
+    );
 
     // Display data
     println!("Saved data: {}, {:.2}, {:.1}cm, {:.1}kg", 
