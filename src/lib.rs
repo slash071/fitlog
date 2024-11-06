@@ -1,6 +1,8 @@
 use std::io::{self, Write};
 use colored::Colorize;
+
 pub mod structs;
+pub mod db;
 
 // Display welcome message
 pub fn display_welcome() {
@@ -18,7 +20,7 @@ pub fn display_welcome() {
 }
 
 // Validate user input for height or weight
-pub fn valid_input(measurement: &str, min: f32, max: f32, unit: &str) -> f32 {
+pub fn valid_input(measurement: &str, min: f64, max: f64, unit: &str) -> f64 {
     loop {
         print!("{}",
             format!(
@@ -31,7 +33,7 @@ pub fn valid_input(measurement: &str, min: f32, max: f32, unit: &str) -> f32 {
         let mut input = String::new();
         io::stdin().read_line(&mut input).expect("Failed to read line");
 
-        match input.trim().parse::<f32>() {
+        match input.trim().parse::<f64>() {
             Ok(num) if num >= min && num <= max => return num,
             _ => println!("{}",
                 format!(
@@ -44,11 +46,19 @@ pub fn valid_input(measurement: &str, min: f32, max: f32, unit: &str) -> f32 {
 }
 
 // Classify BMI into categories
-pub fn classify_bmi(bmi: f32) -> colored::ColoredString {
-    if bmi > 0.0 && bmi < 18.5 { "Underweight".truecolor(250, 179, 135) }
-    else if bmi >= 18.5 && bmi < 25.0 { "Normal Weight".truecolor(166, 227, 161) }
-    else if bmi >= 25.0 && bmi < 30.0 { "Overweight".truecolor(245, 194, 231) }
-    else if bmi >= 30.0 && bmi < 35.0 { "Class I Obesity".truecolor(250, 179, 135) }
-    else if bmi >= 35.0 && bmi < 40.0 { "Class II Obesity".truecolor(243, 139, 168) }
-    else { "Class III Obesity".truecolor(242, 143, 173) }
+pub fn classify_bmi(bmi: f64, color: bool) -> String {
+    let (category, color_code) = match bmi {
+        bmi if bmi < 18.5 => ("Underweight", (250, 179, 135)),
+        bmi if bmi < 25.0 => ("Normal Weight", (166, 227, 161)),
+        bmi if bmi < 30.0 => ("Overweight", (245, 194, 231)),
+        bmi if bmi < 35.0 => ("Class I Obesity", (250, 179, 135)),
+        bmi if bmi < 40.0 => ("Class II Obesity", (243, 139, 168)),
+        _ => ("Class III Obesity", (242, 143, 173)),
+    };
+    
+    if color {
+        category.truecolor(color_code.0, color_code.1, color_code.2).to_string()
+    } else {
+        category.to_string()
+    }
 }
