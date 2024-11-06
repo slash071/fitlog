@@ -11,7 +11,7 @@ pub fn create_table(conn: &Connection) -> Result<()> {
     conn.execute(
         "
         CREATE TABLE IF NOT EXISTS HealthData (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             entry_date TEXT NOT NULL DEFAULT CURRENT_DATE UNIQUE,
             bmi REAL NOT NULL,
             height REAL NOT NULL,
@@ -25,9 +25,9 @@ pub fn create_table(conn: &Connection) -> Result<()> {
 
 // Check if a record for today already exists
 pub fn record_exists(conn: &Connection) -> Result<bool> {
-    let mut stmt = conn.prepare("SELECT COUNT(*) FROM HealthData WHERE entry_date = DATE('now')")?;
-    let already_exists: i64 = stmt.query_row([], |row| row.get(0))?;
-    Ok(already_exists > 0)
+    let mut stmt = conn.prepare("SELECT EXISTS(SELECT 1 FROM HealthData WHERE entry_date = DATE('now'))")?;
+    let exists: bool = stmt.query_row([], |row| row.get(0))?;
+    Ok(exists)
 }
 
 // Insert or update the record for today

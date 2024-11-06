@@ -62,3 +62,19 @@ pub fn classify_bmi(bmi: f64, color: bool) -> String {
         category.to_string()
     }
 }
+
+pub fn prompt_yes_no(question: &str) -> bool {
+    loop {
+        print!("{} (yes/no): ", question);
+        io::stdout().flush().expect("Unable to flush stdout");
+
+        let mut answer = String::new();
+        io::stdin().read_line(&mut answer).expect("Failed to read line");
+
+        match answer.trim().to_lowercase().as_str() {
+            "yes" | "y" => return true,
+            "no" | "n" => return false,
+            _ => println!("Invalid response. Please answer 'yes' or 'no'."),
+        }
+    }
+}

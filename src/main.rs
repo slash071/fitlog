@@ -2,12 +2,12 @@ use fitlog::{
     valid_input,
     classify_bmi,
     display_welcome,
+    prompt_yes_no,
     structs::Person,
     db::{open_db, create_table, record_exists, upsert_record}
 };
 use colored::Colorize;
 use rusqlite::Result;
-use std::io::{self, Write};
 
 const MIN_HEIGHT: f64 = 50.0;
 const MAX_HEIGHT: f64 = 300.0;
@@ -42,27 +42,14 @@ fn main() -> Result<()> {
 
     // Check if a record already exists for today
     if record_exists(&conn)? {
-        // Prompt the user for overwrite confirmation
-        print!("A record for today already exists. Do you want to overwrite it? (yes/no): ");
-        io::stdout().flush().expect("Unable to flush stdout");
-
-        let mut answer = String::new();
-        io::stdin().read_line(&mut answer).expect("Failed to read line");
-
-        match answer.trim().to_lowercase().as_str() {
-            "yes" => {
-                upsert_record(&conn, user.bmi, user.height, user.weight, &classify_bmi(user.bmi, false))?;
-                println!("Data for today has been successfully updated!");
-            }
-            "no" => {
-                println!("No changes made to today's record.");
-            }
-            _ => {
-                println!("Invalid response. No changes made to today's record.");
-            }
-        }        
+        if prompt_yes_no("A record for today already exists. Do you want to overwrite it?") {
+            upsert_record(&conn, user.bmi, user.height, user.weight, &classify_bmi(user.bmi, false))?;
+            println!("Data for today has been successfully updated!");
+        } else {
+            println!("No changes made to today's record.");
+        }
     } else {
-        // Insert a new record if no record exists for today
+        // Save a new record if no record exists for today
         upsert_record(&conn, user.bmi, user.height, user.weight, &classify_bmi(user.bmi, false))?;
         println!("Data for today has been successfully saved!");
     }

@@ -1,6 +1,6 @@
 [package]
 name = "fitlog"
-version = "1.0.0"
+version = "1.2.1"
 authors = ["Mohammadreza Roosta"]
 edition = "2021"
 description = "A simple BMI tracker app to monitor fitness progress."
