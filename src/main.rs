@@ -9,6 +9,7 @@ use fitlog::{
 use colored::Colorize;
 use rusqlite::Result;
 
+// Define reasonable limits for height and weight
 const MIN_HEIGHT: f64 = 50.0;
 const MAX_HEIGHT: f64 = 300.0;
 const MIN_WEIGHT: f64 = 3.0;
